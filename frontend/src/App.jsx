@@ -1,131 +1,62 @@
-// /src/App.jsx
+
 // import { useState } from "react";
-// import EditorPanel from "./components/EditorPanel"; // Import EditorPanel
-// import OutputPanel from "./components/OutputPanel"; // Import OutputPanel
-// import RunButton from "./components/RunButton"; // Import RunButton
+// import EditorPanel from "./components/EditorPanel";
+// import OutputPanel from "./components/OutputPanel";
+// import RunButton from "./components/RunButton";
 
 // const App = () => {
 //   const [output, setOutput] = useState(""); // State to hold API response
+//   const [code, setCode] = useState(""); // State to store the editor's code
 
 //   // Function to handle the API call
 //   // const handleRunCode = async () => {
-//   //   try {
-//   //     const response = await fetch("YOUR_API_ENDPOINT_HERE", {
-//   //       method: "POST",
-//   //       headers: {
-//   //         "Content-Type": "application/json",
-//   //       },
-//   //       body: JSON.stringify({
-//   //         code: "your code here", // You will get this code from Monaco Editor state
-//   //       }),
-//   //     });
-
-//   //     const data = await response.json();
-//   //     setOutput(data.output); // Assuming the API returns an 'output' key
-//   //   } catch (error) {
-//   //     console.error("Error executing code:", error);
-//   //     setOutput("Error occurred while executing code.");
-//   //   }
-//   // };
-//   const handleRunCode = async () => {
-//     setOutput("Compiling...");
-
-//   try {
-//       const response = await fetch("https://emkc.org/api/v2/piston/execute", {
-//           method: "POST",
-//           headers: {
-//               "Content-Type": "application/json"
-//           },
-//           body: JSON.stringify({
-//             "language": "cpp",
-//             "version": "10.2.0",
-//               "files": [
-//                   {
-//                       "content": code
-//                   }
-//               ]
-//           })
-//       })
-
-//       if(!response.ok){
-//           const errorData = await response.json();
-//           setOutput(Error ${response.status} : ${JSON.stringify(errorData)});
-//         return;
-//       }
-
-
-//       const data = await response.json();
-//       console.log(data);
-
-//     setOutput(data.run.output);
-//   } catch (error) {
-//       console.error("Error fetching from piston api",error);
-//       setOutput(Error : ${error.message});
-//   }
-// };
-//   return (
-//     <div className="flex h-screen">
-//       {/* Left side: Editor */}
-//       <div className="w-1/2 p-4 bg-gray-900">
-//         <EditorPanel />
-//       </div>
-
-//       {/* Right side: Output */}
-//       <div className="w-1/2 p-4">
-//         {/* Use the RunButton component here */}
-//         <RunButton onClick={handleRunCode} />
-        
-//         <OutputPanel output={output} /> {/* Display the output */}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default App;
-
-// import { useState } from "react";
-// import EditorPanel from "./components/EditorPanel"; // Import EditorPanel
-// import OutputPanel from "./components/OutputPanel"; // Import OutputPanel
-// import RunButton from "./components/RunButton"; // Import RunButton
-
-// const App = () => {
-//   const [output, setOutput] = useState(""); // State to hold API response
-//   const [code, setCode] = useState(""); // State to hold code from the editor
-
-//   // Function to handle the API call
-//   const handleRunCode = async () => {
-//     setOutput("Compiling...");
-
+//   //   setOutput("Compiling...");
+//   const handleStdinChange = (e) => {
+//     setStdin(e.target.value);
+//   };
 //     try {
+//       // const response = await fetch("https://emkc.org/api/v2/piston/execute", {
+//       //   method: "POST",
+//       //   headers: {
+//       //     "Content-Type": "application/json",
+//       //   },
+//       //   body: JSON.stringify({
+//       //     language: "cpp",
+//       //     version: "10.2.0",
+//       //     files: [
+//       //       {
+//       //         content: code, // Use the code from the editor
+//       //       },
+//       //     ],
+//       //   }),
+//       // });
 //       const response = await fetch("https://emkc.org/api/v2/piston/execute", {
 //         method: "POST",
 //         headers: {
-//           "Content-Type": "application/json",
+//             "Content-Type": "application/json"
 //         },
 //         body: JSON.stringify({
-//           language: "cpp",
-//           version: "10.2.0",
-//           files: [
-//             {
-//               content: code, // Pass the code from the state
-//             },
-//           ],
-//         }),
-//       });
-
+//             "language": "cpp",
+//             "version": "10.2.0",
+//             "files": [
+//                 {
+//                     "content": code
+//                 }
+//             ],
+//             "stdin": stdin
+//         })
+//     });
 //       if (!response.ok) {
 //         const errorData = await response.json();
-//         setOutput(`Error ${response.status} : ${JSON.stringify(errorData)}`);
+//         setOutput(`Error ${response.status}: ${JSON.stringify(errorData)}`);
 //         return;
 //       }
 
 //       const data = await response.json();
-//       console.log(data);
-
-//       setOutput(data.run.output); // Update output with the response
+//       setOutput(data.run.output);
 //     } catch (error) {
-//       console.error("Error fetching from piston API", error);
-//       setOutput(`Error : ${error.message}`);
+//       console.error("Error fetching from piston API:", error);
+//       setOutput(`Error: ${error.message}`);
 //     }
 //   };
 
@@ -133,23 +64,22 @@
 //     <div className="flex h-screen">
 //       {/* Left side: Editor */}
 //       <div className="w-1/2 p-4 bg-gray-900">
-//         <EditorPanel onCodeChange={setCode} /> {/* Pass setCode as a prop */}
+//         <EditorPanel onCodeChange={setCode} /> {/* Pass the function to capture code */}
 //       </div>
 
 //       {/* Right side: Output */}
 //       <div className="w-1/2 p-4">
-//         {/* Use the RunButton component here */}
-//         <RunButton onClick={handleRunCode} />
-
+//         <RunButton onClick={handleRunCode} /> {/* Button to trigger API call */}
 //         <OutputPanel output={output} /> {/* Display the output */}
 //       </div>
 //     </div>
+    
 //   );
 // };
 
 // export default App;
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import EditorPanel from "./components/EditorPanel";
 import OutputPanel from "./components/OutputPanel";
 import RunButton from "./components/RunButton";
@@ -157,10 +87,17 @@ import RunButton from "./components/RunButton";
 const App = () => {
   const [output, setOutput] = useState(""); // State to hold API response
   const [code, setCode] = useState(""); // State to store the editor's code
+  const [stdin, setStdin] = useState(""); // State to store user input for stdin
+  const stdinRef = useRef(null); // Ref for the stdin textarea (optional but helpful for focus management)
+
+  // Function to handle changes to the stdin textarea
+  const handleStdinChange = (e) => {
+    setStdin(e.target.value);
+  };
 
   // Function to handle the API call
   const handleRunCode = async () => {
-    setOutput("Compiling...");
+    setOutput("Compiling..."); // Show a compiling message while the API is being called
 
     try {
       const response = await fetch("https://emkc.org/api/v2/piston/execute", {
@@ -169,13 +106,10 @@ const App = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          language: "cpp",
-          version: "10.2.0",
-          files: [
-            {
-              content: code, // Use the code from the editor
-            },
-          ],
+          language: "cpp", // Specify the programming language
+          version: "10.2.0", // Compiler version
+          files: [{ content: code }], // Pass the code from the editor
+          stdin: stdin, // Pass the stdin input
         }),
       });
 
@@ -186,9 +120,9 @@ const App = () => {
       }
 
       const data = await response.json();
-      setOutput(data.run.output);
+      setOutput(data.run.output || "No output received"); // Update the output state
     } catch (error) {
-      console.error("Error fetching from piston API:", error);
+      console.error("Error fetching from Piston API:", error);
       setOutput(`Error: ${error.message}`);
     }
   };
@@ -200,9 +134,25 @@ const App = () => {
         <EditorPanel onCodeChange={setCode} /> {/* Pass the function to capture code */}
       </div>
 
-      {/* Right side: Output */}
-      <div className="w-1/2 p-4">
+      {/* Right side: Output and Stdin */}
+      <div className="w-1/2 p-4 bg-gray-800 text-white">
+        {/* Run Button */}
         <RunButton onClick={handleRunCode} /> {/* Button to trigger API call */}
+
+        {/* Standard Input (stdin) */}
+        <div className="mt-4">
+          <label className="block text-white font-medium mb-2">Standard Input (stdin):</label>
+          <textarea
+            ref={stdinRef}
+            className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 bg-gray-700 text-white"
+            rows="4"
+            value={stdin}
+            onChange={handleStdinChange}
+            placeholder="Enter your standard input here..."
+          />
+        </div>
+
+        {/* Output Panel */}
         <OutputPanel output={output} /> {/* Display the output */}
       </div>
     </div>
