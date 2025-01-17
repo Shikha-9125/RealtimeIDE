@@ -137,7 +137,7 @@ const App = () => {
       {/* Right side: Output and Stdin */}
       <div className="w-1/2 p-4 bg-gray-800 text-white">
         {/* Run Button */}
-        <RunButton onClick={handleRunCode} /> {/* Button to trigger API call */}
+        <RunButton handleRunCode={handleRunCode} /> {/* Button to trigger API call */}
 
         {/* Standard Input (stdin) */}
         <div className="mt-4">
