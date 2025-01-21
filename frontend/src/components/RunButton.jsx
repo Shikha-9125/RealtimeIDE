@@ -1,13 +1,10 @@
 import React from "react";
-
+import "./RunButton.css";
 const RunButton = ({ handleRunCode }) => {
   return (
-    <button
-      onClick={handleRunCode}
-      className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition-all duration-200"
-    >
-      Run Code
-    </button>
+    <div className="output-header">
+      <button onClick={handleRunCode}>Run Code</button>
+    </div>
   );
 };
 
