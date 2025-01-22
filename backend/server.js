@@ -7,7 +7,7 @@ import dotenv from "dotenv"; // Import dotenv for environment variables
 import cors from "cors"; // Import cors for handling Cross-Origin Resource Sharing
 import bodyParser from "body-parser"; // Import body-parser to parse JSON payloads
 import connectDB from "./config/db.js"; // Import the database connection function
-
+import router from "./routes/auth.js"
 // Load environment variables
 dotenv.config(); // This reads your .env file and loads the variables into process.env
 
@@ -18,9 +18,12 @@ connectDB(); // Calls the function to connect to MongoDB using the connection st
 const app = express();
 
 // Middlewares
-app.use(cors()); // Enable CORS
+app.use(cors({ origin: "http://localhost:5173", credentials: true })); // Replace with your frontend's URL
+ // Enable CORS
 app.use(bodyParser.json()); // Enable JSON parsing for incoming requests
 
+
+app.use("/api/auth", router)
 // Example Routes (you can add real routes here)
 app.get("/", (req, res) => {
   res.send("API is running...");
