@@ -16,17 +16,14 @@ const Home = () => {
 
             {/* Main Content */}
             <div className="home-content">
-                <h2>Welcome to Realtime IDE</h2>
-                <p>Collaborate and code in real-time with others.</p>
-                <div className="home-buttons">
-                    <button className="btn" onClick={() => alert("Create New File")}>
-                        Create New File
-                    </button>
-                    <button className="btn" onClick={() => alert("Open Existing File")}>
-                        Open Existing File
-                    </button>
-                </div>
-            </div>
+    <h2>Welcome to Realtime IDE</h2>
+    <p>Collaborate and code in real-time with others.</p>
+    <div className="home-buttons">
+        <p>Here, you can collaborate with your team to work on various projects, share your code, and get real-time feedback!</p>
+        <p>Use the editor to write your code and execute it seamlessly with others.</p>
+    </div>
+</div>
+
         </div>
     );
 };

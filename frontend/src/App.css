@@ -1,4 +1,4 @@
-.app-container {
+ .app-container {
   display: flex;
   height: 100vh;
   width: 100vw;
@@ -10,9 +10,6 @@
   width: 40%;
 }
 
-
-
-/* Room name container styling (belongs in App.css) */
 .room-name-container {
   display: flex;
   align-items: center;
@@ -43,6 +40,61 @@
 
 .room-name-input:focus {
   outline: none;
-  border-color: #0078d7; /* Adds a blue highlight on focus */
-}
+  border-color: #0078d7; 
+  }
+
+  /* .app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  /* ✅ Add file section styling */
+  /* .file-section {
+    width: 20%; 
+    background-color: #1e1e1e;
+    border-right: 1px solid #3c3c3c;
+    padding: 10px;
+    overflow-y: auto;
+    color: white;
+  }
+  .right-panel {
+    display: flex;
+    flex-direction: column;
+    width: 30%;  /* Reduced from 40% to make space} */
+  
+  
+  /* Room name container styling */
+  /*.room-name-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #2f2f2f;
+    border-bottom: 1px solid #3c3c3c;
+  }
+  
+  .room-name-container label {
+    margin-right: 10px;
+    color: #ffffff;
+    font-weight: 600;
+  }
+  
+  .room-name-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    background-color: #3c3c3c;
+    color: #ffffff;
+    font-size: 14px;
+  }
+  
+  .room-name-input::placeholder {
+    color: #aaaaaa;
+  }
+  
+  .room-name-input:focus {
+    outline: none;
+    border-color: #0078d7;} */
+   
 
