@@ -1,0 +1,56 @@
+/* FileExplorer.css */
+.file-explorer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 220px;
+  background-color: #252526;
+  color: #fff;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid #333;
+}
+
+.file-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}
+
+.new-file-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.file-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.file-item {
+  padding: 8px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-item:hover {
+  background-color: #2a2d2e;
+}
+
+.file-item.selected {
+  background-color: #37373d;
+}
+
+.loading {
+  padding: 15px;
+  color: #888;
+}

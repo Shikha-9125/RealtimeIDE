@@ -1,75 +1,99 @@
-
-  import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
   import Editor from "@monaco-editor/react";
   import * as Y from "yjs";
   import { WebrtcProvider } from "y-webrtc";
   import { MonacoBinding } from "y-monaco";
   import "./EditorSection.css";
 
-  const EditorSection = ({ setCode, roomName = "default-room" }) => {
-    const editorRef = useRef(null); // Reference to the Monaco editor
-    const ydocRef = useRef(null); // Reference to the Y.Doc
-    const providerRef = useRef(null); // Reference to the WebrtcProvider
-    const [awarenessInfo, setAwarenessInfo] = useState([]); // Awareness state to track users
+  const EditorSection = ({code, setCode, activeFile}) => {
+    console.log("ActiveFileId in editor Section:", activeFile);
+    const editorRef = useRef(null); 
+    const ydocRef = useRef(null); 
+    const providerRef = useRef(null); 
+    const [awarenessInfo, setAwarenessInfo] = useState([]);
 
+    const cleanup = () => {
+      if (providerRef.current) {
+        providerRef.current.destroy();
+        ydocRef.current.destroy();
+        providerRef.current = null;
+        ydocRef.current = null;
+      }
+    };
+
+    
     useEffect(() => {
-      // Initialize Y.Doc and WebrtcProvider only once
-      const ydoc = new Y.Doc();
-      ydocRef.current = ydoc;
-
-      const provider = new WebrtcProvider(roomName, ydoc, {
-        signaling: ['ws://localhost:4444'], // Use your signaling server
+      cleanup(); // Cleanup old instances before initializing
+    
+      if (!ydocRef.current) {
+        ydocRef.current = new Y.Doc(); // Ensure only one Yjs doc is created
+      }
+    
+      console.log("Joining Yjs room:", activeFile);
+    
+      if (!providerRef.current) {
+        providerRef.current = new WebrtcProvider(activeFile, ydocRef.current, {
+          signaling: ['ws://localhost:4444'],
+        });
+      }
+    
+      const ytext = ydocRef.current.getText("monaco");
+    
+      providerRef.current.on('synced', (isSynced) => {
+        console.log("Synced with Yjs document, current content:", ytext.toString());
+    
+        setTimeout(() => {
+          if (ytext.toString().trim().length === 0) {
+            console.log("First user detected, inserting initial content:", code);
+            ytext.insert(0, code);
+          } else {
+            console.log("Yjs already contains data, using existing content.");
+            setCode(ytext.toString()); // Ensure we load existing Yjs content
+          }
+        }, 1000);
       });
-      providerRef.current = provider;
-
-      // Awareness local state setup
-      provider.awareness.setLocalStateField("user", {
+    
+      providerRef.current.awareness.setLocalStateField("user", {
         name: `User-${Math.floor(Math.random() * 1000)}`,
         color: `hsl(${Math.random() * 360}, 100%, 75%)`
       });
-
-      // Awareness info update
-      const updateAwareness = () => {
-        const users = Array.from(provider.awareness.getStates().values()).map(
-          (state) => state.user
-        );
-        setAwarenessInfo(users);
-      };
-
-      provider.awareness.on("change", updateAwareness);
-      // Cleanup on unmount
+    
+      ytext.observe(() => {
+        console.log("Yjs document updated:", ytext.toString());
+        setCode(ytext.toString()); // Update editor when Yjs changes
+      });
+    
       return () => {
-        provider.destroy();
-        ydoc.destroy();
+        providerRef.current.off('synced');
+        cleanup();
       };
-    }, [roomName]);
-
+    }, [activeFile]);
+    
     const handleEditorDidMount = (editor) => {
       editorRef.current = editor;
-
-      // Bind Y.Doc text type to Monaco editor
       const ydoc = ydocRef.current;
       const provider = providerRef.current;
-      const type = ydoc.getText("monaco");
-
-      // Create MonacoBinding
-      const binding = new MonacoBinding(
-        type,
-        editor.getModel(),
-        new Set([editor]),
-        provider.awareness
-      );
-
-      // Sync code changes with parent component
+      const ytext = ydoc.getText("monaco");
+    
+      console.log("Binding Yjs to Monaco editor...");
+    
+      // Ensure Monaco is bound to Yjs
+      new MonacoBinding(ytext, editor.getModel(), new Set([editor]), provider.awareness);
+    
+      // Listen for local changes and update Yjs
       editor.onDidChangeModelContent(() => {
-        const code = editor.getValue();
-        setCode(code);
+        const currentCode = editor.getValue();
+        console.log("Editor content changed, updating Yjs:", currentCode);
+        if (ytext.toString() !== currentCode) {
+          ytext.delete(0, ytext.length);
+          ytext.insert(0, currentCode);
+        }
       });
-
-      // Store binding in ref for cleanup
-      providerRef.current.binding = binding;
+    
+      // Ensure Monaco starts with the Yjs content
+      editor.setValue(ytext.toString());
     };
-
+    
     return (
       <div className="editor-container">
         <Editor
@@ -77,6 +101,7 @@
           width="100%"
           theme="vs-dark"
           language="cpp"
+          value={code}
           onMount={handleEditorDidMount}
         />
         <div className="awareness-container">
@@ -94,107 +119,3 @@
   };
 
   export default EditorSection;
-
-//   import React, { useRef, useEffect, useState } from "react";
-// import Editor from "@monaco-editor/react";
-// import * as Y from "yjs";
-// import { WebrtcProvider } from "y-webrtc";
-// import { MonacoBinding } from "y-monaco";
-// import "./EditorSection.css";
-
-// const EditorSection = ({ setCode, roomName = "default-room", selectedFileContent }) => {
-//   const editorRef = useRef(null); // Reference to the Monaco editor
-//   const ydocRef = useRef(null); // Reference to the Y.Doc
-//   const providerRef = useRef(null); // Reference to the WebrtcProvider
-//   const [awarenessInfo, setAwarenessInfo] = useState([]); // Awareness state to track users
-
-//   useEffect(() => {
-//     // Initialize Y.Doc and WebrtcProvider only once
-//     const ydoc = new Y.Doc();
-//     ydocRef.current = ydoc;
-
-//     const provider = new WebrtcProvider(roomName, ydoc, {
-//       signaling: ['ws://localhost:4444'], // Use your signaling server
-//     });
-//     providerRef.current = provider;
-
-//     // Awareness local state setup
-//     provider.awareness.setLocalStateField("user", {
-//       name: `User-${Math.floor(Math.random() * 1000)}`,
-//       color: `hsl(${Math.random() * 360}, 100%, 75%)`
-//     });
-
-//     // Awareness info update
-//     const updateAwareness = () => {
-//       const users = Array.from(provider.awareness.getStates().values()).map(
-//         (state) => state.user
-//       );
-//       setAwarenessInfo(users);
-//     };
-
-//     provider.awareness.on("change", updateAwareness);
-
-//     // Cleanup on unmount
-//     return () => {
-//       provider.destroy();
-//       ydoc.destroy();
-//     };
-//   }, [roomName]);
-
-//   const handleEditorDidMount = (editor) => {
-//     editorRef.current = editor;
-
-//     // Bind Y.Doc text type to Monaco editor
-//     const ydoc = ydocRef.current;
-//     const provider = providerRef.current;
-//     const type = ydoc.getText("monaco");
-
-//     // Create MonacoBinding
-//     const binding = new MonacoBinding(
-//       type,
-//       editor.getModel(),
-//       new Set([editor]),
-//       provider.awareness
-//     );
-
-//     // Sync code changes with parent component
-//     editor.onDidChangeModelContent(() => {
-//       const code = editor.getValue();
-//       setCode(code);
-//     });
-
-//     // Store binding in ref for cleanup
-//     providerRef.current.binding = binding;
-//   };
-
-//   // ✅ Update editor when a new file is selected
-//   useEffect(() => {
-//     if (editorRef.current && selectedFileContent !== undefined) {
-//       editorRef.current.setValue(selectedFileContent); // Load selected file content
-//     }
-//   }, [selectedFileContent]);
-
-//   return (
-//     <div className="editor-container">
-//       <Editor
-//         height="100%"
-//         width="100%"
-//         theme="vs-dark"
-//         language="cpp"
-//         onMount={handleEditorDidMount}
-//       />
-//       <div className="awareness-container">
-//         <p>Active Users:</p>
-//         <ul>
-//           {awarenessInfo.map((user, index) => (
-//             <li key={index} style={{ color: user.color }}>
-//               {user.name}
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default EditorSection;

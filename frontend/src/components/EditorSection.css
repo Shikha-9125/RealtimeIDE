@@ -1,37 +1,34 @@
 .editor-container {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #1e1e1e; /* Matches Monaco editor's dark theme */
-  border: 1px solid #3c3c3c; /* Adds a subtle border */
-  border-radius: 8px; /* Smooth corners */
-  overflow: hidden; /* Prevents content overflow */
-  position: relative; /* Allows positioning for awareness container */
+  flex: 5;
+  background-color: #1e1e1e; 
+  border: 1px solid #3c3c3c; 
+  overflow: hidden; 
+  position: relative; 
 }
 
-/* Awareness container styling */
 .awareness-container {
   position: absolute;
-  top: 10px; /* Position it near the top */
-  right: 80px; /* Align it to the right */
-  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
-  padding: 6px 12px; /* Add padding for spacing */
-  border-radius: 8px; /* Smooth corners */
-  color: #ffffff; /* White text for visibility */
-  font-size: 12px; /* Small font size */
-  font-weight: 500; /* Slightly bold text */
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border for contrast */
-  pointer-events: none; /* Makes the container unclickable */
+  top: 10px; 
+  right: 100px; 
+  background-color: rgba(255, 255, 255, 0.1); 
+  padding: 6px 12px; 
+  border-radius: 8px; 
+  color: #ffffff; 
+  font-size: 12px; 
+  font-weight: 500; 
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  pointer-events: none; 
 }
 
-/* Awareness container when multiple users are collaborating */
 .awareness-container.active {
-  background-color: rgba(0, 120, 215, 0.2); /* Blueish tint for active collaboration */
-  border-color: rgba(0, 120, 215, 0.5); /* Blue border */
-  animation: pulse 1.5s infinite; /* Adds a subtle pulsing effect */
+  background-color: rgba(0, 120, 215, 0.2);
+  border-color: rgba(0, 120, 215, 0.5); 
+  animation: pulse 1.5s infinite; 
 }
 
-/* Pulse animation for active collaboration */
+
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -49,11 +46,12 @@
 
 .user-cursor-before{
   width: 2px;
-  height: 1.4em; /* Adjust for appropriate cursor height */
+  height: 1.4em; 
    margin-right:1px
-  /*position:relative;*/
+  
 }
 .user-cursor{
    z-index: 999;
     position:relative
 }
+

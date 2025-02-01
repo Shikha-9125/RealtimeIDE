@@ -7,7 +7,9 @@ import dotenv from "dotenv"; // Import dotenv for environment variables
 import cors from "cors"; // Import cors for handling Cross-Origin Resource Sharing
 import bodyParser from "body-parser"; // Import body-parser to parse JSON payloads
 import connectDB from "./config/db.js"; // Import the database connection function
-import router from "./routes/auth.js"
+import router from "./routes/auth.js";
+import userRouter from "./routes/user.js"
+import fileRouter from "./routes/file.js"
 // Load environment variables
 dotenv.config(); // This reads your .env file and loads the variables into process.env
 
@@ -24,6 +26,8 @@ app.use(bodyParser.json()); // Enable JSON parsing for incoming requests
 
 
 app.use("/api/auth", router)
+app.use("/api/users", userRouter)
+app.use("/api/files", fileRouter)
 // Example Routes (you can add real routes here)
 app.get("/", (req, res) => {
   res.send("API is running...");
