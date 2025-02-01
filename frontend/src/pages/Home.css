@@ -4,9 +4,19 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    position: relative;
+}
+
+.home-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: url('https://static.vecteezy.com/system/resources/previews/007/213/032/original/graphics-design-illustration-digital-circuit-with-binary-coded-decimal-diagram-technology-for-background-wallpaper-illustration-free-vector.jpg') no-repeat center center/cover;
-    color: white;
-    font-family: Arial, sans-serif;
+    opacity: 0.65; /* Adjust this value between 0 and 1 to control opacity */
+    z-index: -1;
 }
 
 /* Navbar */
