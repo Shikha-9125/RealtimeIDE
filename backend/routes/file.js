@@ -125,4 +125,35 @@ fileRouter.post("/share", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+fileRouter.delete("/:fileId", async (req, res) => {
+  try {
+    const { fileId } = req.params;
+
+    // Validate fileId format
+    if (!mongoose.Types.ObjectId.isValid(fileId)) {
+      return res.status(400).json({ error: "Invalid fileId" });
+    }
+
+    // Find and delete the file
+    const file = await File.findById(fileId);
+    if (!file) {
+      return res.status(404).json({ error: "File not found" });
+    }
+
+    // Remove file reference from user's fileCreated array
+    await User.findByIdAndUpdate(file.createdBy, {
+      $pull: { fileCreated: fileId }
+    });
+
+    // Delete the file document
+    await File.findByIdAndDelete(fileId);
+
+    res.status(200).json({ message: "File deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting file:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default fileRouter;

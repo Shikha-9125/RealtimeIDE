@@ -21,9 +21,9 @@ function EditorPage() {
   const codeRef = useRef(code);
   const isSavingRef = useRef(false);
 
-  console.log('Current Creator:', currentCreator);
-  console.log('User ID:', userId);
-  console.log('Active File:', activeFile);
+  // console.log('Current Creator:', currentCreator);
+  // console.log('User ID:', userId);
+  // console.log('Active File:', activeFile);
 
   useEffect(() => {
     activeFileRef.current = activeFile;
@@ -33,13 +33,17 @@ function EditorPage() {
   const saveCurrentFile = async () => {
     console.log("save function hitted");
     console.log(isSavingRef.current);
+    if (localStorage.getItem('isDeletingFile') === 'true'){
+      console.log("Skipping save - file is being deleted");
+      return;
+    }
     if (isSavingRef.current) return;
     isSavingRef.current = true;
     
     const currentFile = activeFileRef.current;
     const currentCode = codeRef.current;
-    console.log(currentFile);
-    console.log(currentCode);
+    console.log("currentFile", currentFile);
+    console.log("currentCode", currentCode);
     if (!currentFile || !currentCode) {
       isSavingRef.current = false;
       return;
@@ -130,6 +134,18 @@ function EditorPage() {
   };
 
   const handleFileSelect = (fileData) => {
+    if (!fileData){
+      setCode('');
+      setActiveFile(null);
+      activeFileRef.current = null;
+      setTimeout(() => {
+        setCode('');
+      }, 100);
+      setCurrentCreator(null);
+      console.log("fileData is null",activeFileRef.current);
+      return;
+  }
+    saveCurrentFile();
     // Reset the code state first
     setCode('');
     // Then set the new file data
