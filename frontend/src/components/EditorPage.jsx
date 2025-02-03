@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import EditorSection from "./EditorSection";
@@ -131,15 +130,27 @@ function EditorPage() {
   };
 
   const handleFileSelect = (fileData) => {
+    // Reset the code state first
+    setCode('');
+    // Then set the new file data
     setActiveFile(fileData.id);
-    setCode(fileData.content);
+    // Set the code after a small delay to ensure proper initialization
+    setTimeout(() => {
+      setCode(fileData.content);
+    }, 100);
     setCurrentCreator(fileData.createdBy);
   };
 
-  const handleCreateFile = (file) =>{
+  const handleCreateFile = (file) => {
     setFiles(prevFiles => [...prevFiles, file]);
+    // Reset the code state first
+    setCode('');
+    // Then set the new file data
     setActiveFile(file._id);
-    setCode(file.content);
+    // Set the code after a small delay to ensure proper initialization
+    setTimeout(() => {
+      setCode(file.content);
+    }, 100);
     setCurrentCreator(file.createdBy);
   };
   
