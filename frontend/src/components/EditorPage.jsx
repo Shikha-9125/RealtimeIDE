@@ -56,7 +56,7 @@ function EditorPage() {
       const timeoutId = setTimeout(() => controller.abort(), 2000);
 
       // Try normal fetch first
-      await fetch(`https://realtimeide-backend-poht.onrender.com/api/files/${currentFile}`, {
+      await fetch(`http://localhost:5000/api/files/${currentFile}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -35,7 +35,7 @@ const EditorSection = ({ code, setCode, activeFile }) => {
     ydocRef.current = ydoc;
     
     const provider = new WebrtcProvider(`collab-${activeFile}`, ydoc, {
-      signaling: ['https://y-webrtc-flax.vercel.app/']
+      signaling: ['ws://localhost:4444'] // Local URL for the signaling server
     });
     
     providerRef.current = provider;

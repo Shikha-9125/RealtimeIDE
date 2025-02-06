@@ -18,7 +18,7 @@ const AccessControl = ({ fileId}) => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://realtimeide-backend-poht.onrender.com/api/files/share', {
+      const response = await fetch('http://localhost:5000/api/files/share', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,3 +74,4 @@ const AccessControl = ({ fileId}) => {
 };
 
 export default AccessControl;
+
