@@ -20,7 +20,7 @@ connectDB(); // Calls the function to connect to MongoDB using the connection st
 const app = express();
 
 // Middlewares
-app.use(cors({ origin: "http://localhost:5173", credentials: true })); // Replace with your frontend's URL
+app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173", credentials: true })); // Replace with your frontend's URL
  // Enable CORS
 app.use(bodyParser.json()); // Enable JSON parsing for incoming requests
 
