@@ -15,7 +15,7 @@ const Login = () => {
     try {
       console.log("email", email);
       console.log("password", password);
-      const response = await axios.post("http://localhost:5000/api/auth/login", {
+      const response = await axios.post("https://realtimeide-backend-poht.onrender.com/api/auth/login", {
         email,
         password,
       });

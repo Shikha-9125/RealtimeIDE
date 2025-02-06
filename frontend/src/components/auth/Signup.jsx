@@ -20,7 +20,7 @@ const Signup = () => {
     }
     setLoading(true); // Disable button while loading
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/signup", {
+      const response = await axios.post("https://realtimeide-backend-poht.onrender.com/api/auth/signup", {
         username,
         email,
         password,
