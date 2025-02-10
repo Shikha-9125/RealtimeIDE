@@ -31,14 +31,18 @@ const HomePage = () => {
               </Link>
             </>
           )}
-          <Link to="/editorpage" className="nav-link">
-            Editor Page
-          </Link>
+          
           {isLoggedIn && (
-            <button onClick={handleLogout} className="nav-link">
-              Logout
-            </button>
+            <>
+              <Link to="/editorpage" className="nav-link">
+                Editor Page
+              </Link>
+              <button onClick={handleLogout} className="nav-link">
+                Logout
+              </button>
+            </>
           )}
+
         </nav>
       </header>
       <main className="main-content">
