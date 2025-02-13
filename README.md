@@ -24,9 +24,11 @@ Ensure you have the following installed:
 - *npm* or *yarn*
 - Clone the WebRTC repository from GitHub to your project to start the signaling server:
   ```sh
-  git clone https://github.com/yourusername/webrtc-signaling.git
-  cd webrtc-signaling
+  git clone https://github.com/yjs/y-webrtc
+  cd y-webrtc
   npm install
+  cd bin
+  node server.js
   ```
 
 ### Installation
