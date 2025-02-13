@@ -44,8 +44,8 @@ MongoDB (Installed locally or using a cloud service like MongoDB Atlas)
 Steps
 
 # Clone the repository
-git clone https://github.com/GauravSrivastav575/Realtime-Collaborative-IDE.git
-cd Realtime-Collaborative-IDE
+git clone https://github.com/Shikha-9125/RealtimeIDE.git
+cd RealtimeIDE
 
 # Install dependencies
 npm install
@@ -96,7 +96,7 @@ npx kill-port 5000
 Then restart the backend.
 
 ## Demo Video 🎥
-Watch the project in action: [Click here to watch the demo](https://your-video-link.com)
+Watch the project in action: [Click here to watch the demo](https://drive.google.com/file/d/1ciBFa_Z7OR2ZQu8mzn9M9skOcYJw5Xnb/view?usp=sharing)
 
 
 
