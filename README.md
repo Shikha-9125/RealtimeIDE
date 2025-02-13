@@ -31,31 +31,51 @@ Ensure you have the following installed:
   node server.js
   ```
 
-### Installation
-```sh
+Installation
+
+Follow these steps to set up the project locally:
+
+Prerequisites
+
+Node.js (Latest LTS version recommended)
+
+MongoDB (Installed locally or using a cloud service like MongoDB Atlas)
+
+Steps
+
 # Clone the repository
-git clone https://github.com/yourusername/realtime-ide.git
-cd realtime-ide
+git clone https://github.com/GauravSrivastav575/Realtime-Collaborative-IDE.git
+cd Realtime-Collaborative-IDE
 
 # Install dependencies
-cd frontend
 npm install
-cd ../backend
-npm install
-```
 
-### Running the Project
-#### Start Backend Server
-```sh
-cd backend
+# Set up environment variables
+# Create a .env file in the root directory and configure required variables (e.g., MongoDB connection string, API keys)
+
+# Start the backend server
 node server.js
-```
 
-#### Start Frontend
-```sh
-cd frontend
+# Start the frontend
 npm run dev
-```
+
+# Open the project in the browser at http://localhost:3000
+
+Running the Y-Webrtc Signaling Server
+
+The project requires a signaling server for WebRTC-based synchronization. Follow these steps to set it up:
+
+# Clone the y-webrtc repository
+git clone https://github.com/yjs/y-webrtc.git
+cd y-webrtc
+
+# Navigate to the bin folder
+cd bin
+
+# Start the signaling server
+node server.js
+
+# The server will start on port 4444 by default
 
 The application will be available at *http://localhost:5173/* (or another port if 5173 is occupied).
 
