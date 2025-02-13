@@ -5,7 +5,7 @@ import OutputSection from "./OutputSection";
 import StdinSection from "./StdinSection";
 import RunButton from "./RunButton";
 import FileExplorer from "./FileExplorer";
-import AccessControl from './AccessControl';
+import AccessControl from "./AccessControl";
 import "./EditorPage.css";
 
 function EditorPage() {
@@ -15,15 +15,12 @@ function EditorPage() {
   const [stdin, setStdin] = useState("");
   const [activeFile, setActiveFile] = useState(null);
   const [currentCreator, setCurrentCreator] = useState(null);
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem("userId");
+
   // Refs to track latest values
   const activeFileRef = useRef(activeFile);
   const codeRef = useRef(code);
   const isSavingRef = useRef(false);
-
-  // console.log('Current Creator:', currentCreator);
-  // console.log('User ID:', userId);
-  // console.log('Active File:', activeFile);
 
   useEffect(() => {
     activeFileRef.current = activeFile;
@@ -31,62 +28,67 @@ function EditorPage() {
   }, [activeFile, code]);
 
   const saveCurrentFile = async () => {
-    console.log("save function hitted");
-    console.log(isSavingRef.current);
-    if (localStorage.getItem('isDeletingFile') === 'true'){
+    console.log("Save function triggered");
+    if (localStorage.getItem("isDeletingFile") === "true") {
       console.log("Skipping save - file is being deleted");
       return;
     }
     if (isSavingRef.current) return;
     isSavingRef.current = true;
-    
+
     const currentFile = activeFileRef.current;
     const currentCode = codeRef.current;
-    console.log("currentFile", currentFile);
-    console.log("currentCode", currentCode);
     if (!currentFile || !currentCode) {
       isSavingRef.current = false;
       return;
     }
 
     try {
-      console.log("sending code through fetch api");
-      const token = localStorage.getItem('token');
+      console.log("Sending code through fetch API");
+      const token = localStorage.getItem("token");
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 2000);
 
-      // Try normal fetch first
       await fetch(`http://localhost:5000/api/files/${currentFile}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ codeBase: currentCode }),
         signal: controller.signal,
-        keepalive: true
+        keepalive: true,
       });
-      
+
       clearTimeout(timeoutId);
     } catch (error) {
-      console.error('Primary save failed, trying beacon:', error);
+      console.error("Primary save failed, trying beacon:", error);
     } finally {
       isSavingRef.current = false;
     }
   };
+
+  // Auto-save every 5 seconds
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      saveCurrentFile();
+    }, 5000); // Save every 5 seconds
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       saveCurrentFile();
       if (!isSavingRef.current) {
         e.preventDefault();
-        e.returnValue = '';
+        e.returnValue = "";
       }
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
@@ -106,18 +108,18 @@ function EditorPage() {
       const response = await fetch("https://emkc.org/api/v2/piston/execute", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           language: "cpp",
           version: "10.2.0",
           files: [
             {
-              content: code
-            }
+              content: code,
+            },
           ],
-          stdin
-        })
+          stdin,
+        }),
       });
 
       if (!response.ok) {
@@ -134,23 +136,20 @@ function EditorPage() {
   };
 
   const handleFileSelect = (fileData) => {
-    if (!fileData){
-      setCode('');
+    if (!fileData) {
+      setCode("");
       setActiveFile(null);
       activeFileRef.current = null;
       setTimeout(() => {
-        setCode('');
+        setCode("");
       }, 100);
       setCurrentCreator(null);
-      console.log("fileData is null",activeFileRef.current);
+      console.log("fileData is null", activeFileRef.current);
       return;
-  }
+    }
     saveCurrentFile();
-    // Reset the code state first
-    setCode('');
-    // Then set the new file data
+    setCode("");
     setActiveFile(fileData.id);
-    // Set the code after a small delay to ensure proper initialization
     setTimeout(() => {
       setCode(fileData.content);
     }, 100);
@@ -158,30 +157,24 @@ function EditorPage() {
   };
 
   const handleCreateFile = (file) => {
-    setFiles(prevFiles => [...prevFiles, file]);
-    // Reset the code state first
-    setCode('');
-    // Then set the new file data
+    setFiles((prevFiles) => [...prevFiles, file]);
+    setCode("");
     setActiveFile(file._id);
-    // Set the code after a small delay to ensure proper initialization
     setTimeout(() => {
       setCode(file.content);
     }, 100);
     setCurrentCreator(file.createdBy);
   };
-  
+
   const isCreator = currentCreator === userId;
-  // console.log(isCreator);
+
   return (
     <div className="app-container">
-      <FileExplorer 
-        onFileSelect={handleFileSelect} 
-        onCreateFile={handleCreateFile}
-      />
+      <FileExplorer onFileSelect={handleFileSelect} onCreateFile={handleCreateFile} />
       <div className="editor-panel">
-        <EditorSection code={code} setCode={setCode} activeFile={activeFile}/>
+        <EditorSection code={code} setCode={setCode} activeFile={activeFile} />
         <div className="right-panel">
-          {isCreator && activeFile && (<AccessControl fileId={activeFile} />)}
+          {isCreator && activeFile && <AccessControl fileId={activeFile} />}
           <RunButton handleRunCode={handleRunCode} />
           <OutputSection output={output} />
           <StdinSection stdin={stdin} setStdin={setStdin} />
