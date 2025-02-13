@@ -78,9 +78,7 @@ Then restart the backend.
 ## Demo Video 🎥
 Watch the project in action: [Click here to watch the demo](https://your-video-link.com)
 
-## Contributors
-- *Your Name* - Lead Developer
-- *Other Contributors*
+
 
 Feel free to open issues and contribute! 🚀
 
